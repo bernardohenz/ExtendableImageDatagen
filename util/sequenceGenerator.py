@@ -84,7 +84,11 @@ class NumpyArrayGenerator(keras.utils.Sequence):
             indexes = self.indexes[index*self.batch_size:]
         # Find list of IDs
         # Generate data
-        X, y = self.__data_generation(indexes)
+        if self.y is None:
+            X = self.__data_generation(indexes)
+            return X
+        else:
+            X, y = self.__data_generation(indexes)
 
         return X, y
 
@@ -97,10 +101,13 @@ class NumpyArrayGenerator(keras.utils.Sequence):
     def __data_generation(self, list_indexes):
         'Generates data containing batch_size samples' # X : (n_samples, *dim, n_channels)
         # Initialization
-        batch_x = np.empty((len(list_indexes),)+self.X.shape[1:])
+        
         for i, cur_index in enumerate(list_indexes):
             x = self.X[cur_index]
-            batch_x[i] = self.image_data_generator.process(x)
+            x = self.image_data_generator.process(x)
+            if i==0:
+                batch_x = np.empty((len(list_indexes),)+x.shape)
+            batch_x[i] = x
         if self.y is None:
             return batch_x
         batch_y = self.y[list_indexes]
