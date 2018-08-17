@@ -1,6 +1,8 @@
 '''Fairly basic set of tools for real-time data augmentation on image data.
 Can easily be extended to include new transformations,
 new process methods, etc...
+
+Based on the implementation of git user oeway (Wei Ouyang). Link: https://github.com/oeway/keras
 '''
 from __future__ import absolute_import
 from __future__ import print_function
